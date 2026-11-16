@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Formularz</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #eeeeee;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            width: 320px;
+            margin: 20px auto;
+            padding: 15px;
+            border: 1px solid gray;
+            text-align: left;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            padding: 6px;
+            box-sizing: border-box;
+            margin-top: 3px;
+        }
+
+        input[type="radio"] {
+            display: inline;
+            width: auto;
+        }
+
+        span {
+            color: red;
+            font-size: 13px;
+            display: block;
+        }
+
+        button {
+            padding: 6px 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Formularz</h2>
+
+    <form id="formularz" novalidate>
+        
+        <p>
+            <label>
+                Imię:
+                <input type="text" name="imie" required pattern="[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+" data-komunikat="Podaj imię, używając tylko liter.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Nazwisko:
+                <input type="text" name="nazwisko" required pattern="[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż\-]+" data-komunikat="Podaj nazwisko, używając tylko liter.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Ulica:
+                <input type="text" name="ulica" required maxlength="50" data-komunikat="Podaj ulicę.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Miasto:
+                <input type="text" name="miasto" required maxlength="50" pattern="[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+([ \-][A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+)*" data-komunikat="Podaj miasto. Użyj liter, spacji lub łącznika.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Hasło:
+                <input type="password" name="haslo" required data-komunikat="Podaj hasło.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Data urodzenia:
+                <input type="date" name="data_urodzenia" required data-komunikat="Podaj datę.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Telefon:
+                <input type="tel" name="telefon" required pattern="[+]48[0-9]{9}" placeholder="+48123456789" data-komunikat="Wpisz np. +48123456789.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Email:
+                <input type="email" name="email" required data-komunikat="Podaj poprawny e-mail.">
+            </label>
+            <span></span>
+        </p>
+
+        <p>
+            <label>
+                Uwagi:
+                <input type="text" name="uwagi">
+            </label>
+        </p>
+
+        <p>
+            Prawo jazdy:<br>
+            <label><input type="radio" name="prawo_jazdy" value="tak" required data-komunikat="Wybierz Tak lub Nie."> Tak</label>
+            <label><input type="radio" name="prawo_jazdy" value="nie"> Nie</label>
+            <span></span>
+        </p>
+
+        <button type="submit">Wyślij</button>
+        <button type="reset">Wyczyść</button>
+
+    </form>
+
+    <script>
+        const formularz = document.getElementById("formularz");
+        const pola = formularz.querySelectorAll("[data-komunikat]");
+
+        formularz.addEventListener("submit", function (e) {
+            e.preventDefault();
+            let czyPoprawny = true;
+
+            for (let pole of pola) {
+                let wiersz = pole.closest("p");
+                let komunikat = wiersz.querySelector("span");
+                let jestOk = pole.checkValidity();
+
+                if (pole.type !== "radio" && pole.value.trim() === "") {
+                    jestOk = false;
+                }
+
+                if (jestOk) {
+                    komunikat.textContent = "";
+                } else {
+                    komunikat.textContent = pole.dataset.komunikat;
+                    czyPoprawny = false;
+                }
+            }
+
+            if (czyPoprawny) {
+                alert("Formularz jest poprawny!");
+            }
+        });
+
+        formularz.addEventListener("reset", function () {
+            let spany = formularz.querySelectorAll("span");
+            for (let s of spany) {
+                s.textContent = "";
+            }
+        });
+    </script>
+
+</body>
+</html>
